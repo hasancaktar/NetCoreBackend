@@ -1,16 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dem.Application.Features.Commands.Product.Create;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dem.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProductsController : BaseController
 {
 
-    [HttpGet("GetProduct")]
-    public IActionResult GetProduct(int id)
+    [HttpPost("CreateProduct")]
+    public async Task<IActionResult> CreateProduct(CreateProductCommandRequest createProductCommandRequest)
     {
-        var response = Mediator.Send(id);
+        var response =await Mediator.Send(createProductCommandRequest);
         return Ok(response);
     }
 }

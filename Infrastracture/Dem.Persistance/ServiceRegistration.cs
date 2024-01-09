@@ -3,6 +3,8 @@ using Dem.Persistance.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using Dem.Application.Repositories.Product;
+using Dem.Persistance.Repositories.Product;
 
 
 namespace Dem.Persistance;
@@ -15,7 +17,12 @@ public static class ServiceRegistration
         services.AddIdentityCore<User>(options =>
         {
             // IdentityCore yapılandırma seçenekleri
-        }).AddRoles<Role>().AddEntityFrameworkStores<DemBackDbContext>();
+        }).AddRoles<Role>()
+        .AddEntityFrameworkStores<DemBackDbContext>()
+        .AddSignInManager<SignInManager<User>>();
+
+        services.AddScoped<IProductRepository, ProductRepository>();
+
     }
 }
 

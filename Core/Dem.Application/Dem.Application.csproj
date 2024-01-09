@@ -8,10 +8,18 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Dem.Domain\Dem.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Commands\Product\Delete\" />
+    <Folder Include="Features\Commands\Product\Update\" />
+    <Folder Include="Features\Queries\" />
   </ItemGroup>
 
 </Project>

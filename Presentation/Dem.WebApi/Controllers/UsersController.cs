@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dem.Application.Features.Commands.CreateUser;
+using Dem.Application.Features.Commands.LoginUser;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dem.WebApi.Controllers;
 
@@ -6,6 +8,17 @@ namespace Dem.WebApi.Controllers;
 [ApiController]
 public class UsersController : BaseController
 {
-    
+    [HttpPost("CreateUser")]
+    public async Task<IActionResult> CreateUser(CreateUserCommandRequest createUserCommandRequest)
+    {
+        var response = await Mediator.Send(createUserCommandRequest);
+        return Ok(response);
+    }
+    [HttpPost("Login")]
+    public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
+    {
+        var response = await Mediator.Send(loginUserCommandRequest);
+        return Ok(response);
+    }
 }
 
