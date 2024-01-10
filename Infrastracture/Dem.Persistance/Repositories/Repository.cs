@@ -23,19 +23,19 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
             query = query.AsNoTracking();
         return query;
     }
-    public IQueryable<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true)
+    public IQueryable<T> GetWhere(Expression<Func<T, bool>> filter, bool tracking = true)
     {
-        var query = Table.Where(method);
+        var query = Table.Where(filter);
         if (!tracking)
             query = query.AsNoTracking();
         return query;
     }
-    public async Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = true)
+    public async Task<T> GetSingleAsync(Expression<Func<T, bool>> filter, bool tracking = true)
     {
         var query = Table.AsQueryable();
         if (!tracking)
             query = Table.AsNoTracking();
-        return await query.FirstOrDefaultAsync(method);
+        return await query.FirstOrDefaultAsync(filter);
     }
     public async Task<T> GetByIdAsync(string id, bool tracking = true)
     //=> await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
@@ -46,34 +46,34 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
             query = Table.AsNoTracking();
         return await query.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
     }
-    public async Task<bool> AddAsync(T model)
+    public async Task<bool> AddAsync(T entity)
     {
-        EntityEntry<T> entityEntry = await Table.AddAsync(model);
+        EntityEntry<T> entityEntry = await Table.AddAsync(entity);
         return entityEntry.State == EntityState.Added;
     }
-    public async Task<bool> AddRangeAsync(List<T> datas)
+    public async Task<bool> AddRangeAsync(List<T> entities)
     {
-        await Table.AddRangeAsync(datas);
+        await Table.AddRangeAsync(entities);
         return true;
     }
-    public bool Remove(T model)
+    public bool Remove(T entity)
     {
-        EntityEntry<T> entityEntry = Table.Remove(model);
+        EntityEntry<T> entityEntry = Table.Remove(entity);
         return entityEntry.State == EntityState.Deleted;
     }
-    public bool RemoveRange(List<T> datas)
+    public bool RemoveRange(List<T> entities)
     {
-        Table.RemoveRange(datas);
+        Table.RemoveRange(entities);
         return true;
     }
     public async Task<bool> RemoveAsync(string id)
     {
-        T model = await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
-        return Remove(model);
+        T entity = await Table.FirstOrDefaultAsync(entity => entity.Id == Guid.Parse(id));
+        return Remove(entity);
     }
-    public bool Update(T model)
+    public bool Update(T entity)
     {
-        EntityEntry entityEntry = Table.Update(model);
+        EntityEntry entityEntry = Table.Update(entity);
         return entityEntry.State == EntityState.Modified;
     }
     public async Task<int> SaveAsync()

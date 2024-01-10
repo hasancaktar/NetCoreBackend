@@ -1,9 +1,4 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dem.Application.Features.Commands.CreateUser;
 
@@ -14,5 +9,4 @@ public class CreateUserCommandRequest : IRequest<CreateUserCommandResponse>
     public string PasswordConfirm { get; set; }
     public string Email { get; set; }
     public string NameSurname { get; set; }
-
 }

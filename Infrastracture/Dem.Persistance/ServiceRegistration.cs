@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Dem.Application.Repositories.Product;
 using Dem.Persistance.Repositories.Product;
 
-
 namespace Dem.Persistance;
 
 public static class ServiceRegistration
@@ -22,7 +21,5 @@ public static class ServiceRegistration
         .AddSignInManager<SignInManager<User>>();
 
         services.AddScoped<IProductRepository, ProductRepository>();
-
     }
 }
-

@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.1-pre01" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.2-pre01" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -19,7 +21,6 @@
   <ItemGroup>
     <Folder Include="Features\Commands\Product\Delete\" />
     <Folder Include="Features\Commands\Product\Update\" />
-    <Folder Include="Features\Queries\" />
   </ItemGroup>
 
 </Project>

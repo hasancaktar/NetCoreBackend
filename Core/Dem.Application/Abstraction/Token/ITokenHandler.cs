@@ -2,5 +2,6 @@
 
 public interface ITokenHandler
 {
-    Model.Token CreateAccessToken();
+    ModelDtos.Token CreateAccessToken();
+    string CreateRefreshToken();
 }
