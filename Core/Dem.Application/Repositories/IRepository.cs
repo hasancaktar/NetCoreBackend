@@ -16,6 +16,6 @@ public interface IRepository<T> where T : BaseEntity
     Task<bool> RemoveAsync(string id);
     bool Update(T entity);
 
-    Task<int> SaveAsync();
+    Task<int> SaveChangesAsync();
 }
 

@@ -1,11 +1,13 @@
 ﻿using Dem.Application.Repositories.Product;
 using MediatR;
+using Dem.Persistance.UnitOfWork;
 
 namespace Dem.Application.Features.Commands.Product.Create;
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandRequest, CreateProductCommandResponse>
 {
     private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CreateProductCommandHandler(IProductRepository productRepository)
     {
@@ -22,14 +24,12 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
 
         if (result)
         {
-            await _productRepository.SaveAsync();
+            await _productRepository.SaveChangesAsync();
+            await _unitOfWork.CommitAsync();
+
             response.Message = "Ürün eklendi";
             return response;
         }
-        else
-        {
-            response.Message = "Ürün ekleme başarısız";
-            return response;
-        }
+        throw new ArgumentException("Ürün ekleme başarısız");
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Dem.Application.Behavior;
 using FluentValidation;
 using System.Reflection;
+using Dem.Persistance.UnitOfWork;
 
 public static class ServiceRegistration
 {

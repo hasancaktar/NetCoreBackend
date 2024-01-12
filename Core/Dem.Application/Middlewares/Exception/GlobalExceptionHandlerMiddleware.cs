@@ -44,9 +44,7 @@ public class GlobalExceptionHandlerMiddleware
             };
 
             var exceptionJson = JsonConvert.SerializeObject(exceptionResponse, Formatting.Indented);
-
             _logger.LogError(exception.Message);
-
             await context.Response.WriteAsync(exceptionJson);
         }
 
@@ -61,6 +59,16 @@ public class GlobalExceptionHandlerMiddleware
 
             _logger.LogError(exception.Message);
             var responseJson = JsonConvert.SerializeObject(errorResponse, Formatting.Indented);
+            await context.Response.WriteAsync(responseJson);
+        }
+        else
+        {
+            var errorResponse = new ErrorResponse
+            {
+                Error = exception.Message,
+            };
+            _logger.LogError(exception.Message);
+            var responseJson = JsonConvert.SerializeObject(errorResponse);
             await context.Response.WriteAsync(responseJson);
         }
     }
