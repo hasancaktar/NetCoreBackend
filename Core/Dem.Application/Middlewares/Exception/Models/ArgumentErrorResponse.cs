@@ -2,5 +2,5 @@
 
 public class ArgumentErrorResponse : BaseErrorResponse
 {
-    public string Error { get; set; }
+    public string? Error { get; set; }
 }
