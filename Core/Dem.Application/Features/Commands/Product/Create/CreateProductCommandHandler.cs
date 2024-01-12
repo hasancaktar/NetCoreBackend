@@ -1,6 +1,6 @@
 ﻿using Dem.Application.Repositories.Product;
 using MediatR;
-using Dem.Persistance.UnitOfWork;
+using Dem.Application.Abstraction;
 
 namespace Dem.Application.Features.Commands.Product.Create;
 
@@ -9,9 +9,10 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommandR
     private readonly IProductRepository _productRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateProductCommandHandler(IProductRepository productRepository)
+    public CreateProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
     {
         _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<CreateProductCommandResponse> Handle(CreateProductCommandRequest request, CancellationToken cancellationToken)

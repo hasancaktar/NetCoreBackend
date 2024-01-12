@@ -1,4 +1,4 @@
-﻿namespace Dem.Persistance.UnitOfWork;
+﻿namespace Dem.Application.Abstraction;
 
 public interface IUnitOfWork : IDisposable
 {

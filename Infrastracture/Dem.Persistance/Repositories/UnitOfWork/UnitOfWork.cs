@@ -1,4 +1,5 @@
-﻿using Dem.Persistance.Contexts;
+﻿using Dem.Application.Abstraction;
+using Dem.Persistance.Contexts;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Dem.Persistance.UnitOfWork;
@@ -8,10 +9,10 @@ public class UnitOfWork : IUnitOfWork
     private readonly DemBackDbContext _dbContext;
     private readonly IDbContextTransaction _transaction;
 
-    public UnitOfWork(DemBackDbContext dbContext, IDbContextTransaction transaction)
+    public UnitOfWork(DemBackDbContext dbContext)
     {
         _dbContext = dbContext;
-        _transaction = transaction;
+        _transaction = _dbContext.Database.BeginTransaction();
     }
 
     public async Task CommitAsync()
@@ -20,10 +21,10 @@ public class UnitOfWork : IUnitOfWork
         {
             await _transaction.CommitAsync();
         }
-        catch (Exception exception)
+        catch (Exception)
         {
             await _transaction.RollbackAsync();
-            throw exception;
+            throw;
         }
         finally
         {

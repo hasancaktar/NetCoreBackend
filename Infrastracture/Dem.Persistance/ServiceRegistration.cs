@@ -5,15 +5,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Dem.Application.Repositories.Product;
 using Dem.Persistance.Repositories.Product;
-using Dem.Persistance.UnitOfWork;
+using Microsoft.Extensions.Configuration;
+using Dem.Application.Abstraction;
 
 namespace Dem.Persistance;
 
 public static class ServiceRegistration
 {
-    public static void AddPersistanceServices(this IServiceCollection services)
+    public static void AddPersistanceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<DemBackDbContext>(options => options.UseSqlServer(@"Server=(LocalDB)\.;Database=DemBack;Trusted_Connection=True;"));
+        services.AddDbContext<DemBackDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("MSSQL")));
         services.AddIdentityCore<User>(options =>
         {
             // IdentityCore yapılandırma seçenekleri

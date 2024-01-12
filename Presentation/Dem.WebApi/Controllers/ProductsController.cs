@@ -7,14 +7,12 @@ namespace Dem.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class ProductsController : BaseController
 {
-
     [HttpPost("Create")]
     public async Task<IActionResult> Create(CreateProductCommandRequest createProductCommandRequest)
     {
-        var response =await Mediator.Send(createProductCommandRequest);
+        var response = await Mediator.Send(createProductCommandRequest);
         return Ok(response);
     }
 
@@ -24,5 +22,12 @@ public class ProductsController : BaseController
         var response = await Mediator.Send(new ProductGetAllQueryRequest());
         return Ok(response);
     }
-}
 
+    [HttpGet("Test Localization")]
+    public async Task<IActionResult> Test()
+    {
+        var response = new { res = Localize["Test"].Value };
+
+        return Ok(response);
+    }
+}
