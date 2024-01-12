@@ -1,4 +1,4 @@
-using Dem.Application;
+using Dem.Application.Middlewares.Exception;
 using Dem.Infrastracture;
 using Dem.Persistance;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -41,9 +41,6 @@ builder.Services.AddSwaggerGen(c =>
                     } });
 });
 
-
-
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
     options.TokenValidationParameters = new()
@@ -55,7 +52,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidAudience = builder.Configuration["Token:Audience"],
         ValidIssuer = builder.Configuration["Token:Issuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
-
     };
 });
 var app = builder.Build();
@@ -67,7 +63,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

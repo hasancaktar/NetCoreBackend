@@ -1,8 +1,8 @@
 ﻿namespace Dem.Application.Exceptions;
 
-public class ExceptionHandler : Exception
+public class ExceptionHandler : ArgumentException
 {
-    public ExceptionHandler():base("Beklenmeyen bir hata alındı!")
+    public ExceptionHandler() : base("Beklenmeyen bir hata alındı!")
     {
     }
 

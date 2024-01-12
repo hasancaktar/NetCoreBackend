@@ -1,8 +1,10 @@
 ﻿using Mapster;
 using MapsterMapper;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-
-namespace Dem.Application;
+using Dem.Application.Behavior;
+using FluentValidation;
+using System.Reflection;
 
 public static class ServiceRegistration
 {
@@ -11,7 +13,10 @@ public static class ServiceRegistration
         services.AddMediatR(options => options.RegisterServicesFromAssembly(typeof(ServiceRegistration).Assembly));
         var config = TypeAdapterConfig.GlobalSettings;
         services.AddSingleton(config);
+
         services.AddScoped<IMapper, ServiceMapper>();
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
-
