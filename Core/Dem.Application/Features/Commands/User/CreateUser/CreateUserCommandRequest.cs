@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Dem.Application.Features.Commands.CreateUser;
+namespace Dem.Application.Features.Commands.User.CreateUser;
 
 public class CreateUserCommandRequest : IRequest<CreateUserCommandResponse>
 {

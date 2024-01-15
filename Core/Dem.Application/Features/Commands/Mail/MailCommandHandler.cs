@@ -14,7 +14,7 @@ public class MailCommandHandler : IRequestHandler<MailCommandRequest, MailComman
 
     public async Task<MailCommandResponse> Handle(MailCommandRequest request, CancellationToken cancellationToken)
     {
-        await _mailService.SendMessageAsync(request.To, request.Subject, request.Body, request.IsBodyHtml);
+        await _mailService.SendMailAsync(request.To, request.Subject, request.Body, request.IsBodyHtml);
         return new() { IsSuccess = true, Message = "Mail gönderildi" };
     }
 }

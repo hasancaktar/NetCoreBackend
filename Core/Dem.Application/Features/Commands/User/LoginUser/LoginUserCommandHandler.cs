@@ -4,18 +4,17 @@ using Dem.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Dem.Application.Features.Commands.LoginUser;
+namespace Dem.Application.Features.Commands.User.LoginUser;
 
 public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
 {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
+    private readonly UserManager<Domain.Entities.Identity.User> _userManager;
+    private readonly SignInManager<Domain.Entities.Identity.User> _signInManager;
     private readonly RoleManager<Role> _roleManager;
-    readonly ITokenHandler _tokenHandler;
+    private readonly ITokenHandler _tokenHandler;
 
-    public LoginUserCommandHandler(ITokenHandler tokenHandler, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+    public LoginUserCommandHandler(ITokenHandler tokenHandler, UserManager<Domain.Entities.Identity.User> userManager, SignInManager<Domain.Entities.Identity.User> signInManager, RoleManager<Role> roleManager)
     {
-
         _tokenHandler = tokenHandler;
         _userManager = userManager;
         _signInManager = signInManager;
@@ -24,7 +23,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, 
 
     public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
     {
-        User user = await _userManager.FindByNameAsync(request.UsernameOrEmail);
+        Domain.Entities.Identity.User user = await _userManager.FindByNameAsync(request.UsernameOrEmail);
         if (user == null)
             user = await _userManager.FindByEmailAsync(request.UsernameOrEmail);
 

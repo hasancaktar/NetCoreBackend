@@ -8,22 +8,21 @@ namespace Dem.Infrastracture.Services;
 
 public class MailService : IMailService
 {
-    IConfiguration _configuration;
+    private IConfiguration _configuration;
 
     public MailService(IConfiguration configuration)
     {
         _configuration = configuration;
     }
 
-    public async Task SendMessageAsync(string to, string subject, string body, bool isBodyHtml = true)
+    public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
     {
         //aşağıdaki overload'ı tetikliyor
-        await SendMessageAsync(new[] { to }, subject, body, isBodyHtml);
+        await SendMailAsync(new[] { to }, subject, body, isBodyHtml);
     }
 
-    public async Task SendMessageAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
+    public async Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
     {
-
         MailMessage mail = new();
         mail.Subject = subject;
         mail.Body = body;
@@ -39,5 +38,19 @@ public class MailService : IMailService
         smtp.UseDefaultCredentials = false;
 
         await smtp.SendMailAsync(mail);
+    }
+
+    public async Task SendPasswordResetMailAsync(string to, string userId, string resetToken)
+    {
+        StringBuilder mail = new();
+        mail.AppendLine("Merhaba<br>Eğer yeni şifre talebinde bulunduysanız aşağıdaki linkten şifrenizi yenileyebilirsiniz.<br><strong><a target=\"_blank\" hred=\".........../");
+        mail.AppendLine(userId);
+        mail.AppendLine("/");
+        mail.AppendLine(resetToken);
+        mail.Append("\">Yeni şifre talebi için tıklayınız...</a></strong><br><br> <span style=\"font-size:12px;\">NOT: EĞER BU TALEP SİZİN TARAFINIZDAN GERÇEKLEŞTİRİLMEDİYSE BU MAIL'İ CİDDİYE ALMAYIN.</span><br>Saygılar...<br><br>DemBack AŞ");
+
+        await SendMailAsync(to, "Şifre resetleme talebi", mail.ToString());
+
+        throw new NotImplementedException();
     }
 }

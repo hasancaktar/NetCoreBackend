@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Dem.Application.Features.Commands.LoginUser;
+namespace Dem.Application.Features.Commands.User.LoginUser;
 
 public class LoginUserCommandRequest : IRequest<LoginUserCommandResponse>
 {

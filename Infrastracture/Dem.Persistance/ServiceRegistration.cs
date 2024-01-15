@@ -20,7 +20,8 @@ public static class ServiceRegistration
             // IdentityCore yapılandırma seçenekleri
         }).AddRoles<Role>()
         .AddEntityFrameworkStores<DemBackDbContext>()
-        .AddSignInManager<SignInManager<User>>();
+        .AddSignInManager<SignInManager<User>>()
+        .AddDefaultTokenProviders();
 
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
