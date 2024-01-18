@@ -8,4 +8,6 @@ public interface IUserService
     Task<CreateUserCommandResponse> CreateAsync(CreateUserCommandRequest model);
 
     Task UpdateRefreshTokenAsync(string refreshToken, User user, DateTime accessTokenDate, int addOnAccessTokenDate);
+
+    Task UpdatePassword(string userId, string resetToken, string newPassword);
 }

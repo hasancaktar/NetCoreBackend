@@ -40,17 +40,21 @@ public class MailService : IMailService
         await smtp.SendMailAsync(mail);
     }
 
-    public async Task SendPasswordResetMailAsync(string to, string userId, string resetToken)
+    public async Task<string> SendPasswordResetMailAsync(string to, string userId, string resetToken)
     {
         StringBuilder mail = new();
-        mail.AppendLine("Merhaba<br>Eğer yeni şifre talebinde bulunduysanız aşağıdaki linkten şifrenizi yenileyebilirsiniz.<br><strong><a target=\"_blank\" hred=\".........../");
+        mail.AppendLine("Merhaba<br>Eğer yeni şifre talebinde bulunduysanız aşağıdaki linkten şifrenizi yenileyebilirsiniz.<br><strong><a target=\"_blank\" href=\"");
+        mail.AppendLine(_configuration["Urls:BaseUrl"]);
+        mail.AppendLine("/Users/ResetPassowrd/");
         mail.AppendLine(userId);
         mail.AppendLine("/");
         mail.AppendLine(resetToken);
-        mail.Append("\">Yeni şifre talebi için tıklayınız...</a></strong><br><br> <span style=\"font-size:12px;\">NOT: EĞER BU TALEP SİZİN TARAFINIZDAN GERÇEKLEŞTİRİLMEDİYSE BU MAIL'İ CİDDİYE ALMAYIN.</span><br>Saygılar...<br><br>DemBack AŞ");
+        mail.AppendLine("\">Yeni şifre talebi için tıklayınız...</a></strong><br><br> <span style=\"font-size:12px;\">NOT: EĞER BU TALEP SİZİN TARAFINIZDAN GERÇEKLEŞTİRİLMEDİYSE BU MAIL'İ CİDDİYE ALMAYIN.</span><br>Saygılar...<br><br>DemBack AŞ");
 
         await SendMailAsync(to, "Şifre resetleme talebi", mail.ToString());
 
-        throw new NotImplementedException();
+        return mail.ToString();
+
+        //throw new NotImplementedException();
     }
 }

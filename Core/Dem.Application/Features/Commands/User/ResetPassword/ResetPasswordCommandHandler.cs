@@ -1,16 +1,22 @@
-﻿using Dem.Domain.Entities.Identity;
+﻿using Dem.Application.Abstraction;
+using Dem.Application.Helpers;
+using Dem.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace Dem.Application.Features.Commands.User.ResetPassword;
 
 public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommandRequest, ResetPasswordCommandResponse>
 {
     private readonly UserManager<Domain.Entities.Identity.User> _userManager;
+    private IMailService _mailService;
 
-    public ResetPasswordCommandHandler(UserManager<Domain.Entities.Identity.User> userManager)
+    public ResetPasswordCommandHandler(UserManager<Domain.Entities.Identity.User> userManager, IMailService mailService)
     {
         _userManager = userManager;
+        _mailService = mailService;
     }
 
     public async Task<ResetPasswordCommandResponse> Handle(ResetPasswordCommandRequest request, CancellationToken cancellationToken)
@@ -20,16 +26,21 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommandR
         {
             throw new ArgumentException("Kullanıcı bulunamadı");
         }
-        string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-        IdentityResult result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+        //bu yapı mail gönderirken oluşturulacak url'de olmaması gereken "(*,.)" değerleri kaldırmak için.
+        resetToken = resetToken.UrlEncode();
+        //Mail göndererek şifre yenileme yapısı
+        var url = await _mailService.SendPasswordResetMailAsync(request.Email, user.Id, resetToken);
 
-        if (result.Succeeded)
+        //IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, request.NewPassword);
+
+        if (url != null)
         {
             return new()
             {
-                IsSuccess = result.Succeeded,
-                Message = "Şifre değiştirildi"
+                IsSuccess = true,
+                Message = url
             };
         }
         throw new ArgumentException("Şifre değiştirme başarısız");
