@@ -3,10 +3,6 @@ using Dem.Persistance.Contexts;
 
 namespace Dem.Persistance.Repositories.Product;
 
-public class ProductRepository : Repository<Domain.Entities.Product>, IProductRepository
+public class ProductRepository(DemBackDbContext dbContext) : Repository<Domain.Entities.Product>(dbContext), IProductRepository
 {
-    public ProductRepository(DemBackDbContext dbContext) : base(dbContext)
-    {
-    }
 }
-

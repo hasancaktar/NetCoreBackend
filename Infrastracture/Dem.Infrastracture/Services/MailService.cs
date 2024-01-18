@@ -6,15 +6,8 @@ using System.Text;
 
 namespace Dem.Infrastracture.Services;
 
-public class MailService : IMailService
+public class MailService(IConfiguration _configuration) : IMailService
 {
-    private IConfiguration _configuration;
-
-    public MailService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
     public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
     {
         //aşağıdaki overload'ı tetikliyor

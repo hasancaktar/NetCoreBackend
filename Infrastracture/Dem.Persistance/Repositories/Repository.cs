@@ -7,15 +7,8 @@ using System.Linq.Expressions;
 
 namespace Dem.Persistance.Repositories;
 
-public class Repository<T> : IRepository<T> where T : BaseEntity
+public class Repository<T>(DemBackDbContext _dbContext) : IRepository<T> where T : BaseEntity
 {
-    private readonly DemBackDbContext _dbContext;
-
-    public Repository(DemBackDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public DbSet<T> Table => _dbContext.Set<T>();
 
     public IQueryable<T> GetAll(bool tracking = true)

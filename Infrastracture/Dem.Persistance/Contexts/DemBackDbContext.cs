@@ -2,16 +2,11 @@
 using Dem.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Dem.Persistance.Contexts;
 
-public class DemBackDbContext : IdentityDbContext<User,Role,string>
+public class DemBackDbContext(DbContextOptions options) : IdentityDbContext<User, Role, string>(options)
 {
-	public DemBackDbContext(DbContextOptions options):base(options)
-	{
-
-	}
-
-	public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<Product> Products { get; set; }
 }
-
