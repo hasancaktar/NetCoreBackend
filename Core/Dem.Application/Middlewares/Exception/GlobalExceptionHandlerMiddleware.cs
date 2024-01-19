@@ -7,22 +7,13 @@ using System.Net;
 
 namespace Dem.Application.Middlewares.Exception;
 
-public class GlobalExceptionHandlerMiddleware
+public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
-
-    public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
-
     public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (System.Exception exception)
         {
@@ -44,7 +35,7 @@ public class GlobalExceptionHandlerMiddleware
             };
 
             var exceptionJson = JsonConvert.SerializeObject(exceptionResponse, Formatting.Indented);
-            _logger.LogError(exception.Message);
+            logger.LogError(exception.InnerException.Message);
             await context.Response.WriteAsync(exceptionJson);
         }
 
@@ -54,10 +45,10 @@ public class GlobalExceptionHandlerMiddleware
 
             var errorResponse = new ArgumentErrorResponse
             {
-                Error = argumentException.Message,
+                Error = argumentException.InnerException.Message,
             };
 
-            _logger.LogError(exception.Message);
+            logger.LogError(exception.InnerException.Message);
             var responseJson = JsonConvert.SerializeObject(errorResponse, Formatting.Indented);
             await context.Response.WriteAsync(responseJson);
         }
@@ -65,9 +56,9 @@ public class GlobalExceptionHandlerMiddleware
         {
             var errorResponse = new ErrorResponse
             {
-                Error = exception.Message,
+                Error = exception.InnerException.Message,
             };
-            _logger.LogError(exception.Message);
+            logger.LogError(exception.InnerException.Message);
             var responseJson = JsonConvert.SerializeObject(errorResponse);
             await context.Response.WriteAsync(responseJson);
         }

@@ -29,18 +29,26 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommandR
         string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
         //bu yapı mail gönderirken oluşturulacak url'de olmaması gereken "(*,.)" değerleri kaldırmak için.
-        resetToken = resetToken.UrlEncode();
+        //resetToken = resetToken.UrlEncode();
         //Mail göndererek şifre yenileme yapısı
-        var url = await _mailService.SendPasswordResetMailAsync(request.Email, user.Id, resetToken);
+        //var url = await _mailService.SendPasswordResetMailAsync(request.Email, user.Id, resetToken);
 
-        //IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, request.NewPassword);
 
-        if (url != null)
+
+        //if (url != null)
+        //{
+        //    return new()
+        //    {
+        //        IsSuccess = true,
+        //        Message = url
+        //    };
+        //}
+        IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, request.NewPassword);
+        if (result.Succeeded)
         {
-            return new()
-            {
-                IsSuccess = true,
-                Message = url
+            return new() { 
+            IsSuccess = true,
+            Message="Şifre değiştirilidi"
             };
         }
         throw new ArgumentException("Şifre değiştirme başarısız");

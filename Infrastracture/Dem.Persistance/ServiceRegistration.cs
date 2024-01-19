@@ -7,6 +7,7 @@ using Dem.Application.Repositories.Product;
 using Dem.Persistance.Repositories.Product;
 using Microsoft.Extensions.Configuration;
 using Dem.Application.Abstraction;
+using Dem.Persistance.Services;
 
 namespace Dem.Persistance;
 
@@ -23,6 +24,7 @@ public static class ServiceRegistration
         .AddSignInManager<SignInManager<User>>()
         .AddDefaultTokenProviders();
 
+        services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
     }

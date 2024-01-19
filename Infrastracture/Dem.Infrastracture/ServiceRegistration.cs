@@ -1,7 +1,9 @@
 ﻿using Dem.Application.Abstraction;
+using Dem.Application.Abstraction.Configurations;
 using Dem.Application.Abstraction.Token;
 using Dem.Infrastracture.Jobs;
 using Dem.Infrastracture.Services;
+using Dem.Infrastracture.Services.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +21,7 @@ public static class ServiceRegistration
     {
         services.AddScoped<ITokenHandler, Token.TokenHandler>();
         services.AddScoped<IMailService, MailService>();
+        services.AddScoped<IApplicationService, ApplicationService>();
 
         services.AddQuartz(options => { options.UseMicrosoftDependencyInjectionJobFactory(); });
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
