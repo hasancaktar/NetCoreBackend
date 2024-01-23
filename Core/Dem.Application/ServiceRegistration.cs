@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Dem.Application.Behavior;
 using FluentValidation;
 using System.Reflection;
+using Dem.Application.CustomAttributes;
 
 public static class ServiceRegistration
 {
@@ -15,6 +16,7 @@ public static class ServiceRegistration
         services.AddSingleton(config);
 
         services.AddScoped<IMapper, ServiceMapper>();
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

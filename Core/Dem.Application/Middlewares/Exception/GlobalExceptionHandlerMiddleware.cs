@@ -42,15 +42,22 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<Glob
         if (exception is ArgumentException argumentException)
         {
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            var errorResponse = new ArgumentErrorResponse();
 
-            var errorResponse = new ArgumentErrorResponse
+            if (argumentException.InnerException is null)
             {
-                Error = argumentException.InnerException.Message,
-            };
-
-            logger.LogError(exception.InnerException.Message);
-            var responseJson = JsonConvert.SerializeObject(errorResponse, Formatting.Indented);
-            await context.Response.WriteAsync(responseJson);
+                errorResponse.Error = argumentException.Message;
+                logger.LogError(exception.Message);
+                var responseJson = JsonConvert.SerializeObject(errorResponse, Formatting.Indented);
+                await context.Response.WriteAsync(responseJson);
+            }
+            else
+            {
+                errorResponse.Error = argumentException.InnerException.Message;
+                logger.LogError(exception.InnerException.Message);
+                var responseJson = JsonConvert.SerializeObject(errorResponse, Formatting.Indented);
+                await context.Response.WriteAsync(responseJson);
+            }
         }
         else
         {

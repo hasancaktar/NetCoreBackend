@@ -3,13 +3,15 @@ using Dem.Application.CustomAttributes;
 using Dem.Application.Enums;
 using Dem.Application.Features.Commands.Product.Create;
 using Dem.Application.Features.Queries.Product.GetAll;
-using Microsoft.AspNetCore.Authorization;
+using Dem.WebApi.CustomAttributes;
 using Microsoft.AspNetCore.Mvc;
+using LoggingAttribute = Dem.WebApi.CustomAttributes.LoggingAttribute;
 
 namespace Dem.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[TypeFilter(typeof(LoggingAttribute))]
 public class ProductsController : BaseController
 {
     [HttpPost("Create")]
@@ -21,6 +23,7 @@ public class ProductsController : BaseController
     }
 
     [HttpGet("GetAll")]
+    [TypeFilter(typeof(LoggingAttribute))]
     //[Authorize(AuthenticationSchemes = "Admin")]
     [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Product, ActionType = ActionType.Reading, Definition = "Get Product Items")]
     public async Task<IActionResult> CreateProduct()

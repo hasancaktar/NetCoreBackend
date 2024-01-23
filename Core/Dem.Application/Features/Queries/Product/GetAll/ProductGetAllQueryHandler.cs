@@ -1,4 +1,5 @@
-﻿using Dem.Application.Repositories.Product;
+﻿using Dem.Application.CustomAttributes;
+using Dem.Application.Repositories.Product;
 using MapsterMapper;
 using MediatR;
 
@@ -15,6 +16,7 @@ public class ProductGetAllQueryHandler : IRequestHandler<ProductGetAllQueryReque
         _mapper = mapper;
     }
 
+    [Logging("LOGLAMA")]
     public async Task<List<ProductGetAllQueryResponse>> Handle(ProductGetAllQueryRequest request, CancellationToken cancellationToken)
     {
         var productList = _productRepository.GetAll();

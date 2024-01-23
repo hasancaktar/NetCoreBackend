@@ -14,6 +14,7 @@
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="PostSharp" Version="4.2.17" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
   <ItemGroup>
     <Folder Include="Features\Commands\Product\Delete\" />
     <Folder Include="Features\Commands\Product\Update\" />
+    <Folder Include="Middlewares\Logging\" />
   </ItemGroup>
 
 </Project>
