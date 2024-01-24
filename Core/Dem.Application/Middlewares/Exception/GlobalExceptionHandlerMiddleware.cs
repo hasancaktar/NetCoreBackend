@@ -29,44 +29,64 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<Glob
         {
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-            var exceptionResponse = new ValidationErrorResponse
+            var validationErrorResponse = new ValidationErrorResponse
             {
                 Errors = validationException.Errors.Select(error => error.ErrorMessage).ToList()
             };
 
-            var exceptionJson = JsonConvert.SerializeObject(exceptionResponse, Formatting.Indented);
-            logger.LogError(exception.InnerException.Message);
-            await context.Response.WriteAsync(exceptionJson);
+            if (exception.InnerException is null)
+            {
+                logger.LogError(exception.Message);
+                var responseJson = JsonConvert.SerializeObject(validationErrorResponse, Formatting.Indented);
+                await context.Response.WriteAsync(responseJson);
+            }
+            else
+            {
+                logger.LogError(exception.InnerException.Message);
+                var responseJson = JsonConvert.SerializeObject(validationErrorResponse, Formatting.Indented);
+                await context.Response.WriteAsync(responseJson);
+            }
+            return;
         }
 
         if (exception is ArgumentException argumentException)
         {
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            var errorResponse = new ArgumentErrorResponse();
+            var argumentErrorResponse = new ArgumentErrorResponse();
 
             if (argumentException.InnerException is null)
             {
-                errorResponse.Error = argumentException.Message;
+                argumentErrorResponse.Error = argumentException.Message;
                 logger.LogError(exception.Message);
-                var responseJson = JsonConvert.SerializeObject(errorResponse, Formatting.Indented);
+                var responseJson = JsonConvert.SerializeObject(argumentErrorResponse, Formatting.Indented);
                 await context.Response.WriteAsync(responseJson);
             }
             else
             {
-                errorResponse.Error = argumentException.InnerException.Message;
+                argumentErrorResponse.Error = argumentException.InnerException.Message;
                 logger.LogError(exception.InnerException.Message);
-                var responseJson = JsonConvert.SerializeObject(errorResponse, Formatting.Indented);
+                var responseJson = JsonConvert.SerializeObject(argumentErrorResponse, Formatting.Indented);
                 await context.Response.WriteAsync(responseJson);
             }
+            return;
+        }
+
+        var errorResponse = new ErrorResponse
+        {
+            Error = exception.InnerException.Message,
+        };
+        if (exception.InnerException is null)
+        {
+            errorResponse.Error = exception.Message;
+            logger.LogError(exception.Message);
+            var responseJson = JsonConvert.SerializeObject(errorResponse, Formatting.Indented);
+            await context.Response.WriteAsync(responseJson);
         }
         else
         {
-            var errorResponse = new ErrorResponse
-            {
-                Error = exception.InnerException.Message,
-            };
+            errorResponse.Error = exception.InnerException.Message;
             logger.LogError(exception.InnerException.Message);
-            var responseJson = JsonConvert.SerializeObject(errorResponse);
+            var responseJson = JsonConvert.SerializeObject(errorResponse, Formatting.Indented);
             await context.Response.WriteAsync(responseJson);
         }
     }
